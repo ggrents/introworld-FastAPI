@@ -7,8 +7,5 @@ from db import Base
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    username = Column(String, unique=True, index=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    registration_date = Column(DateTime, default=datetime.utcnow)
+    pass
 

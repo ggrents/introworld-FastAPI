@@ -1,16 +1,22 @@
 import uuid
 
 from fastapi import Depends, FastAPI
+from fastapi.encoders import jsonable_encoder
 from fastapi_users import FastAPIUsers
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from db import create_db_and_tables
+from dependencies import get_user_db, get_async_session
 from user.auth import auth_backend
 from user.models import User
-from user.schemas import UserRead, UserCreate
+from user.schemas import UserRead, UserCreate, UserUpdate
 from user.user_manager import get_user_manager
 
-from user.api import user_router
-
-app = FastAPI(title="IntroWorld")
+app = FastAPI(
+    title="IntroWorld",
+    docs_url="/"
+              )
 
 # -------------------- Connection Users management ---------------------#
 
@@ -20,6 +26,8 @@ fastapi_users = FastAPIUsers[User, uuid.UUID](
     [auth_backend],
 )
 current_user = fastapi_users.current_user(optional=True)
+
+
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -33,17 +41,30 @@ app.include_router(
     tags=["auth"],
 )
 
-app.include_router(user_router, tags=["users"])
+us_rout = fastapi_users.get_users_router(UserRead, UserUpdate)
+
+app.include_router(
+    us_rout,
+    prefix="/users",
+    tags=["users"],
+)
+
+
+# app.include_router(user_router, tags=["users"])
 
 
 @app.get("/")
-def m(user: User = Depends(current_user)) :
-    if not user :
+def m(user: User = Depends(current_user)):
+    if not user:
         return "no access!"
-    return f"Hello {user.username}! with email {user.email}"
+    return f"Hello {user.hashed_password}! with email {user.email}"
+
 
 # -------------------------------------------------------------------- #
 
-# @app.on_event("startup")
-# async def on_startup():
-#     await create_db_and_tables()
+@app.on_event("startup")
+async def on_startup():
+    await create_db_and_tables()
+
+
+
