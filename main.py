@@ -16,7 +16,7 @@ from user.user_manager import get_user_manager
 app = FastAPI(
     title="IntroWorld",
     docs_url="/"
-              )
+)
 
 # -------------------- Connection Users management ---------------------#
 
@@ -26,8 +26,6 @@ fastapi_users = FastAPIUsers[User, uuid.UUID](
     [auth_backend],
 )
 current_user = fastapi_users.current_user(optional=True)
-
-
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -65,6 +63,3 @@ def m(user: User = Depends(current_user)):
 @app.on_event("startup")
 async def on_startup():
     await create_db_and_tables()
-
-
-
