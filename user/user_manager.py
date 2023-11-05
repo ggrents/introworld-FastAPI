@@ -8,12 +8,12 @@ from data.models.user import User
 from user.auth import auth_backend
 from dependencies import get_user_db
 
-from cfg import SECRET
+from config import SECRET_KEY
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    reset_password_token_secret = SECRET
-    verification_token_secret = SECRET
+    reset_password_token_secret = SECRET_KEY
+    verification_token_secret = SECRET_KEY
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.username} has registered.")

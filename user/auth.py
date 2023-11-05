@@ -1,13 +1,16 @@
+import os
+
+from dotenv import load_dotenv
 from fastapi_users.authentication import AuthenticationBackend, JWTStrategy
 from fastapi_users.authentication import CookieTransport
 
-from cfg import SECRET
+load_dotenv()
 
 cookie_transport = CookieTransport(cookie_max_age=3600)
 
 
 def get_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=SECRET, lifetime_seconds=3600)
+    return JWTStrategy(secret=os.getenv("SECRET"), lifetime_seconds=3600)
 
 
 auth_backend = AuthenticationBackend(

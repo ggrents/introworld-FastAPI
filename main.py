@@ -20,7 +20,7 @@ from user.user_manager import get_user_manager
 load_dotenv()
 
 app = FastAPI(
-    title=os.getenv('DATABASE'),
+    title="IntroWorld",
     docs_url="/"
 )
 

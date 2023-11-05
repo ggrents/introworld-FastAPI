@@ -8,4 +8,4 @@ from db import Base
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
-    children: Mapped[List["Profile"]] = relationship(back_populates="user")
+    # profile: Mapped[List["Profile"]] = relationship(lazy="joined")
