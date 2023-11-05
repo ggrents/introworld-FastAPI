@@ -10,6 +10,7 @@ from fastapi_users import FastAPIUsers
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.models.profile import Profile
 from data.models.user import User
 from db import create_db_and_tables
 from dependencies import get_user_db, get_async_session
@@ -69,3 +70,11 @@ def m(user: User = Depends(current_user)):
 @app.on_event("startup")
 async def on_startup():
     await create_db_and_tables()
+
+@app.post("/")
+def create_profile(user_id: int, username: str, first_name: str, last_name: str, gender: bool, about: str, image_path: str, db: AsyncSession = Depends(get_async_session)):
+    new_profile = Profile(user_id=user_id, username=username, first_name=first_name, last_name=last_name, gender=gender, about=about, image_path=image_path)
+    db.add(new_profile)
+    db.commit()
+    db.refresh(new_profile)
+    return new_profile
