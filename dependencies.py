@@ -4,8 +4,8 @@ from fastapi import Depends
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.models.user import User
 from db import async_session_maker, engine
-from user.models import User
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

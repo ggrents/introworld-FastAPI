@@ -1,3 +1,7 @@
+import os
+
+from dotenv import load_dotenv
+
 import uuid
 
 from fastapi import Depends, FastAPI
@@ -6,15 +10,17 @@ from fastapi_users import FastAPIUsers
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.models.user import User
 from db import create_db_and_tables
 from dependencies import get_user_db, get_async_session
 from user.auth import auth_backend
-from user.models import User
 from user.schemas import UserRead, UserCreate, UserUpdate
 from user.user_manager import get_user_manager
 
+load_dotenv()
+
 app = FastAPI(
-    title="IntroWorld",
+    title=os.getenv('DATABASE'),
     docs_url="/"
 )
 

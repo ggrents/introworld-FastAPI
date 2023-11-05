@@ -4,8 +4,8 @@ from typing import Optional
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin, FastAPIUsers
 
+from data.models.user import User
 from user.auth import auth_backend
-from user.models import User
 from dependencies import get_user_db
 
 from cfg import SECRET
