@@ -8,5 +8,5 @@ from db import Base
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
-    #id: Mapped[int] = mapped_column(primary_key=True)
-    #profile: Mapped[List["Profile"]] = relationship(back_populates="user")
+    id: Mapped[int] = mapped_column(primary_key=True)
+    profiles: Mapped[List["Profile"]] = relationship(back_populates="user")

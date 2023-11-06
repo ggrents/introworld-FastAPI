@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from data.models.profile import Profile
-from data.models.user import User
+from domain.models.profile import Profile
+from domain.models.user import User
 
 from db import Base
 
