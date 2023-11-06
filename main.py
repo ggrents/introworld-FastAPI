@@ -1,8 +1,9 @@
 from fastapi import Depends, FastAPI
+
+from application.profile_router import profile_router
 from user_auth.auth import auth_backend
 from domain.schemas.user import UserRead, UserCreate, UserUpdate
 from user_auth.user_manager import get_user_manager, fastapi_users, us_rout, current_user
-
 
 app = FastAPI(
     title="IntroWorld",
@@ -25,4 +26,10 @@ app.include_router(
     us_rout,
     prefix="/users",
     tags=["users"],
+)
+
+app.include_router(
+    profile_router,
+    prefix="/profiles",
+    tags=["Profile"]
 )

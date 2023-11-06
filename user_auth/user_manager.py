@@ -44,5 +44,5 @@ fastapi_users = FastAPIUsers[User, int](
     [auth_backend],
 )
 current_user = fastapi_users.current_user(optional=True)
-
+current_superuser = fastapi_users.current_user(active=True, superuser=True)
 us_rout = fastapi_users.get_users_router(UserRead, UserUpdate)

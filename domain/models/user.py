@@ -12,4 +12,4 @@ if TYPE_CHECKING:
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(primary_key=True)
-    profiles: Mapped[List["Profile"]] = relationship(back_populates="user_auth")
+    profiles: Mapped[List["Profile"]] = relationship(back_populates="user")
