@@ -5,10 +5,13 @@ from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin, FastAPIUsers
 
 from domain.models.user import User
-from user.auth import auth_backend
+from domain.schemas.user import UserRead, UserUpdate
+from user_auth.auth import auth_backend
 from dependencies import get_user_db
 
 from config import SECRET_KEY
+
+
 
 
 class UserManager(BaseUserManager[User, int]):
@@ -34,3 +37,12 @@ class UserManager(BaseUserManager[User, int]):
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
+
+
+fastapi_users = FastAPIUsers[User, int](
+    get_user_manager,
+    [auth_backend],
+)
+current_user = fastapi_users.current_user(optional=True)
+
+us_rout = fastapi_users.get_users_router(UserRead, UserUpdate)

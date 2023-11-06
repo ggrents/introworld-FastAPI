@@ -1,29 +1,13 @@
-from dotenv import load_dotenv
-
 from fastapi import Depends, FastAPI
-from fastapi_users import FastAPIUsers
-
-from domain.models.user import User
-from db import create_db_and_tables
-from user.auth import auth_backend
+from user_auth.auth import auth_backend
 from domain.schemas.user import UserRead, UserCreate, UserUpdate
-from user.user_manager import get_user_manager
+from user_auth.user_manager import get_user_manager, fastapi_users, us_rout, current_user
 
-load_dotenv()
 
 app = FastAPI(
     title="IntroWorld",
     docs_url="/"
 )
-
-# -------------------- Connection Users management ---------------------#
-
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
-current_user = fastapi_users.current_user(optional=True)
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -37,35 +21,8 @@ app.include_router(
     tags=["auth"],
 )
 
-us_rout = fastapi_users.get_users_router(UserRead, UserUpdate)
-
 app.include_router(
     us_rout,
     prefix="/users",
     tags=["users"],
 )
-
-
-# app.include_router(user_router, tags=["users"])
-
-
-@app.get("/")
-def m(user: User = Depends(current_user)):
-    if not user:
-        return "no access!"
-    return f"Hello {user.hashed_password}! with email {user.email}"
-
-
-# -------------------------------------------------------------------- #
-
-@app.on_event("startup")
-async def on_startup():
-    await create_db_and_tables()
-#
-# @app.post("/")
-# def create_profile(user_id: int, username: str, first_name: str, last_name: str, gender: bool, about: str, image_path: str, db: AsyncSession = Depends(get_async_session)):
-#     new_profile = Profile(user_id=user_id, username=username, first_name=first_name, last_name=last_name, gender=gender, about=about, image_path=image_path)
-#     db.add(new_profile)
-#     db.commit()
-#     db.refresh(new_profile)
-#     return new_profile

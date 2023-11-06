@@ -1,13 +1,14 @@
 import uuid
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from fastapi_users_db_sqlalchemy import GUID
 from sqlalchemy import String, Boolean, ForeignKey, Column, Integer, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from domain.models.user import User
-
 from db import Base
+
+if TYPE_CHECKING:
+    from .user import User
 
 
 class Profile(Base):
